@@ -1,28 +1,32 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.4
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "DocGenerator",
+    platforms: [.macOS(.v11)],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
+        .executable(
             name: "DocGenerator",
-            targets: ["DocGenerator"]),
+            targets: ["DocGenerator"]
+        )
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMajor(from: "1.1.1")),
+        .package(url: "https://github.com/mediamonks/MMMCommonCore", .upToNextMajor(from: "1.8.4"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
+        .executableTarget(
             name: "DocGenerator",
-            dependencies: []),
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "MMMCommonCore", package: "MMMCommonCore")
+            ]
+        ),
         .testTarget(
             name: "DocGeneratorTests",
-            dependencies: ["DocGenerator"]),
+            dependencies: ["DocGenerator"]
+        )
     ]
 )
