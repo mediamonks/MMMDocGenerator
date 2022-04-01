@@ -30,11 +30,11 @@ internal struct GenerateDocs: ParsableCommand {
             
             return try JSONDecoder().decode(GeneratorOptions.self, from: optionsData)
         }()
-        
+
         guard let name = projectName ?? options.projectName else {
             throw NSError.mmm_error(withDomain: "Generator", message: "No project name specified")
         }
-        
+
         let excludeList = (options.excludeList ?? []).map {
             $0.mmm_stringBySubstitutingVariables([
                 "PROJECT_NAME": name
@@ -64,6 +64,16 @@ internal struct GenerateDocs: ParsableCommand {
     }
     
     private mutating func walk(directory: URL, processAsObjC: Bool, exclude: [String]) throws {
+        
+        var isRootDir: ObjCBool = false
+        
+        guard
+            FileManager.default.fileExists(atPath: directory.path, isDirectory: &isRootDir),
+            isRootDir.boolValue
+        else {
+            // No directory, let's skip.
+            return
+        }
         
         let files = try FileManager.default.contentsOfDirectory(
             at: directory,
