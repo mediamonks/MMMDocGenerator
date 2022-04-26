@@ -23,7 +23,7 @@ internal struct GenerateDocs: ParsableCommand {
         name: .shortAndLong,
         help: "Extra logging"
     )
-    public var verbose: Bool = true
+    public var verbose: Bool = false
     
     public mutating func run() throws {
         
