@@ -1,0 +1,23 @@
+<header class="header">
+  <a href="https://media.monks.com">
+    <img src="{{path_to_root}}img/logo.png" srcset="{{path_to_root}}img/logo@2x.png 2x" alt="Media.Monks" class="header-logo" />
+  </a>
+
+  {{#source_host_url}}
+    <p class="header-col header-col--secondary">
+      <a class="header-link" href="{{.}}">
+        <img class="header-icon" src="{{path_to_root}}img/{{source_host_image}}" alt="{{source_host_name}}"/>
+        View on {{source_host_name}}
+      </a>
+    </p>
+  {{/source_host_url}}
+
+  {{#dash_url}}
+    <p class="header-col header-col--secondary">
+      <a class="header-link" href="{{dash_url}}">
+        <img class="header-icon" src="{{path_to_root}}img/dash.png" alt="Dash"/>
+        Install in Dash
+      </a>
+    </p>
+  {{/dash_url}}
+</header>

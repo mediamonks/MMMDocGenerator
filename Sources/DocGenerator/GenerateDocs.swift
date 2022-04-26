@@ -15,6 +15,12 @@ internal struct GenerateDocs: ParsableCommand {
     
     @Option(
         name: .shortAndLong,
+        help: "The name or path to a custom theme, could be specified in DocGenerator.json as well"
+    )
+    public var themeNameOrPath: String?
+    
+    @Option(
+        name: .shortAndLong,
         help: "Extra logging"
     )
     public var verbose: Bool = true
@@ -60,7 +66,9 @@ internal struct GenerateDocs: ParsableCommand {
         let outcomeData = try JSONSerialization.data(withJSONObject: outcome, options: [])
         try outcomeData.write(to: path.appendingPathComponent("docs.json"))
         
-        print(try shell("jazzy --sourcekitten-sourcefile docs.json"))
+        let themeName = themeNameOrPath ?? options.themeNameOrPath ?? "apple"
+        
+        print(try shell("jazzy --sourcekitten-sourcefile docs.json --theme \(themeName)"))
     }
     
     private mutating func walk(directory: URL, processAsObjC: Bool, exclude: [String]) throws {
