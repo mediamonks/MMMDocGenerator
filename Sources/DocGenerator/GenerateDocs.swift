@@ -66,7 +66,7 @@ internal struct GenerateDocs: ParsableCommand {
         let outcomeData = try JSONSerialization.data(withJSONObject: outcome, options: [])
         try outcomeData.write(to: path.appendingPathComponent("docs.json"))
         
-        let themeName = themeNameOrPath ?? options.themeNameOrPath ?? "apple"
+        let themeName = themeNameOrPath ?? options.themeNameOrPath ?? "./MMMDocGenerator/Assets/Themes/mediamonks"
         
         print(try shell("jazzy --sourcekitten-sourcefile docs.json --theme \(themeName)"))
     }
