@@ -47,10 +47,19 @@ internal struct GenerateDocs: ParsableCommand {
             ])
         }
         
+        if verbose {
+            print("-- Verbose mode --")
+            print("Exclude list: ", excludeList)
+        }
+        
         if let swiftPath = options.swiftPath {
             let files = swiftPath.mmm_stringBySubstitutingVariables([
                 "PROJECT_NAME": name
             ])
+            
+            if verbose {
+                print("Walking Swift path: \(files)")
+            }
             
             try walk(directory: path.appendingPathComponent(files), processAsObjC: false, exclude: excludeList)
         }
@@ -60,13 +69,25 @@ internal struct GenerateDocs: ParsableCommand {
                 "PROJECT_NAME": name
             ])
             
+            if verbose {
+                print("Walking ObjC path: \(files)")
+            }
+            
             try walk(directory: path.appendingPathComponent(files), processAsObjC: true, exclude: excludeList)
         }
         
         let outcomeData = try JSONSerialization.data(withJSONObject: outcome, options: [])
         try outcomeData.write(to: path.appendingPathComponent("docs.json"))
         
+        if verbose {
+            print("Output data: \(outcome)")
+        }
+        
         let themeName = themeNameOrPath ?? options.themeNameOrPath ?? "./MMMDocGenerator/Assets/Themes/mediamonks"
+        
+        if verbose {
+            print("Using theme: \(themeName)")
+        }
         
         print(try shell("jazzy --sourcekitten-sourcefile docs.json --theme \(themeName)"))
     }
@@ -80,6 +101,11 @@ internal struct GenerateDocs: ParsableCommand {
             isRootDir.boolValue
         else {
             // No directory, let's skip.
+            
+            if verbose {
+                print("Skipping (not a directory)", directory)
+            }
+            
             return
         }
         
@@ -88,6 +114,10 @@ internal struct GenerateDocs: ParsableCommand {
             includingPropertiesForKeys: nil,
             options: .skipsHiddenFiles
         )
+        
+        if verbose {
+            print("Found files: ", files)
+        }
         
         try files.forEach { url in
             
@@ -132,7 +162,7 @@ internal struct GenerateDocs: ParsableCommand {
             with: ""
         )
         
-        print("Processing swift file: \(cleanPath)")
+        print("Processing file: \(cleanPath)")
         
         let output: String = try {
             if processAsObjC {
