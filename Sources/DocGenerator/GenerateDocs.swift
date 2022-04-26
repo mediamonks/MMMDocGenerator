@@ -89,7 +89,16 @@ internal struct GenerateDocs: ParsableCommand {
             print("Using theme: \(themeName)")
         }
         
-        print(try shell("jazzy --sourcekitten-sourcefile docs.json --theme \(themeName)"))
+        print(try shell(
+        """
+        jazzy --sourcekitten-sourcefile docs.json \
+        --theme \(themeName) \
+        --author Media.Monks \
+        --author_url https://media.monks.com \
+        --source-host github \
+        --source-host-url https://github.com/mediamonks/\(name)
+        """
+        ))
     }
     
     private mutating func walk(directory: URL, processAsObjC: Bool, exclude: [String]) throws {
